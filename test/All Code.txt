@@ -1,0 +1,239 @@
+# Input a series of  white space seperated integers, check whether these  integers form an arithmetic progression.
+
+def check():
+    nums = list(map(int, input().split()))
+    nums.sort()
+    diff = nums[1] - nums[0]
+    for i in range(2, len(nums)):
+        if nums[i] - nums[i-1] != diff:
+            return False
+    return True
+
+print(check())
+
+------------------------------------------------
+
+# Calculate the average of the input data.
+
+numbers = []
+while True:
+    s = input()
+    if s == '':
+        break
+    numbers.append(float(s))
+
+if len(numbers) == 0:
+    print('N/A')
+else:
+    average = sum(numbers) / len(numbers)
+    print(f'{average:.1f}')
+
+--------------------------------------------------------------
+
+#Define a function that accepts a string, returns the number of letters, digits  and other characters respectively. 
+
+def count(s):
+    letters = sum(c.isalpha() for c in s)
+    digits  = sum(c.isdigit() for c in s)
+    others  = len(s) - letters - digits
+    return (letters, digits, others)
+
+s = input()
+print(count(s))
+
+---------------------------------------------------------------
+
+# Define class MyComplex to represent complex numbers, with methods to implement the addition, subtraction, multiplication, and string representation of complex numbers. 
+
+class MyComplex:
+    def __init__(self, real, image):
+        self.real = real
+        self.image = image
+
+    def __str__(self):
+        if self.image >= 0:
+            return f"{self.real}+{self.image}j"
+        else:
+            return f"{self.real}{self.image}j"
+
+    def __add__(self, other):
+        return MyComplex(self.real + other.real, self.image + other.image)
+
+    def __sub__(self, other):
+        return MyComplex(self.real - other.real, self.image - other.image)
+
+    def __mul__(self, other):
+        real = self.real * other.real - self.image * other.image
+        image = self.real * other.image + self.image * other.real
+        return MyComplex(real, image)
+
+
+def main():
+    from random import seed, sample
+    seed('mycomplex')
+    a1, b1 = sample(range(-5, 5), 2)
+    a2, b2 = sample(range(-5, 5), 2)
+    c1 = MyComplex(a1, b1)
+    c2 = MyComplex(a2, b2)
+    for i in range(4):
+        op = input()
+        if op == '+':
+            print(c1 + c2)
+        elif op == '-':
+            print(c1 - c2)
+        elif op == '*':
+            print(c1 * c2)
+        else:
+            print(c1)
+
+if __name__ == "__main__":
+    main()
+
+-------------------------------------------------------------------
+
+#Given positive integers n and m, how many different ways are there to 
+#take two different numbers from 1 to n such that their sum is a factor of m?
+
+def solve(n, m):
+    count = 0
+    for i in range(1, n + 1):
+        for j in range(i + 1, n + 1):
+            if m % (i + j) == 0:
+                count += 1
+    return count
+
+n, m = map(int, input().split(','))
+print(solve(n, m))
+
+----------------------------------------------------------
+
+# First letter subscript
+
+def index_iter(text):
+    i = 0
+    while i < len(text):
+        if i == 0 or text[i - 1] == ' ':
+            yield i
+        i += 1
+
+s = input()
+indices = index_iter(s)
+print(list(indices))
+
+------------------------------------------------------
+
+# Enter a string and count the number of times each letter appears in it.    
+
+def count_letters(s):
+    result = {}
+    for ch in s.lower():
+        if ch.isalpha():
+            result[ch] = result.get(ch, 0) + 1
+    return result
+
+s = input()
+print(count_letters(s))
+
+----------------------------------------------------
+
+#Generate 100 points (x, y), -50<=x, y<=50, count the number of points in each quandrant.
+
+import random
+
+def gen_points():
+    q1 = q2 = q3 = q4 = 0
+    for _ in range(100):
+        x = random.randint(-50, 50)
+        y = random.randint(-50, 50)
+        if x > 0 and y > 0:
+            q1 += 1
+        elif x < 0 and y > 0:
+            q2 += 1
+        elif x < 0 and y < 0:
+            q3 += 1
+        elif x > 0 and y < 0:
+            q4 += 1
+    return (q1, q2, q3, q4)
+
+random.seed(input())
+print(gen_points())
+
+--------------------------------------------------------------
+
+def my_range(*args):
+    if len(args) == 1:
+        start, stop, step = 0, args[0], 1
+    elif len(args) == 2:
+        start, stop, step = args[0], args[1], 1
+    else:
+        start, stop, step = args[0], args[1], args[2]
+    
+    result = []
+    i = start
+    if step > 0:
+        while i < stop:
+            result.append(i)
+            i += step
+    elif step < 0:
+        while i > stop:
+            result.append(i)
+            i += step
+    return result
+
+vals = eval(input())
+print(my_range(*vals))
+
+-----------------------------------------------------------------
+
+def kth_largest_distinct(arr, k):
+    # Remove duplicates using a set, sort descending
+    unique = sorted(set(arr), reverse=True)
+    return unique[k - 1]
+
+# Parse input manually without ast
+raw = input().strip().strip("[]")
+arr = [int(x.strip()) for x in raw.split(",")]
+k = int(input())
+
+print(kth_largest_distinct(arr, k))
+
+-----------------------------------------------------------
+
+#Determine the shape of a triangle
+
+def judgeTri(a, b, c):
+    a, b, c = sorted((a, b, c))
+    if a + b <= c:
+        return 'ERROR'
+    if a**2 + b**2 == c**2:
+        return 'Z'
+    elif a**2 + b**2 > c**2:
+        return 'R'
+    else:
+        return 'D'
+
+a, b, c = eval(input())
+print(judgeTri(a, b, c))
+
+---------------------------------------------------------
+
+# Define function shift(s, flag, n), cyclic shift the input string s by n bits in accordance with flag ('L' for cyclic left shift, 'R' for cyclic right shift), and return the shifted string. If n is bigger than the length of the string or the value of flag  is not 'L' or 'R', return -1.
+
+def shift(s, flag, n):
+    if flag not in ('L', 'R') or n > len(s):
+        return -1
+    if flag == 'L':
+        return s[n:] + s[:n]
+    else:
+        return s[-n:] + s[:-n]
+
+s = input()
+flag_n = input()
+
+flag, n = flag_n.split(',')
+n = int(n)
+
+print(shift(s, flag.strip(), n))
+
+---------------------------------------------------------
+
